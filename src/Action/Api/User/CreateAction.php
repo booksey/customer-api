@@ -12,10 +12,7 @@ class CreateAction extends AbstractAction
 {
     public function invoke(): ResponseInterface
     {
-        return new JsonResponse([
-            'success' => false,
-            'data' => [],
-            'message' => ''
-        ], 500);
+        $parsedBody = $this->request->getParsedBody();
+        return new JsonResponse(['data' => []], 500);
     }
 }

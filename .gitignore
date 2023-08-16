@@ -3,6 +3,7 @@ cache/
 phpStanTmp/
 vendor/
 .env
+.phpunit.cache
 .phpunit.result.cache
 memory*
 coverage.html/

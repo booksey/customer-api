@@ -7,7 +7,8 @@ use JMS\Serializer\Annotation\Type as SerializerType;
 
 class User
 {
-    private int $customerId;
+    private readonly int $customerId;
+    private string $name;
     private string $address;
     private ?string $code;
     #[SerializerType("DateTime<'Y-m-d'>")]
@@ -18,9 +19,14 @@ class User
         return $this->customerId;
     }
 
-    public function setCustomerId(int $customerId): void
+    public function getName(): string
     {
-        $this->customerId = $customerId;
+        return $this->name;
+    }
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
     }
 
     public function getAddress(): string
