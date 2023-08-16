@@ -1,0 +1,23 @@
+includes:
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+services:
+    -
+        class: PHPStan\Rules\StrictCalls\StrictFunctionCallsRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: PHPStan\Rules\SwitchConditions\MatchingTypeInSwitchCaseConditionRule
+        tags:
+            - phpstan.rules.rule
+
+parameters:
+    checkGenericClassInNonGenericObjectType: false
+    checkMissingIterableValueType: false
+    parallel:
+    		maximumNumberOfProcesses: 2
+    tmpDir: '%currentWorkingDirectory%/phpStanTmp'
+    reportUnmatchedIgnoredErrors: false
+    ignoreErrors:
+        -
+            message: '#Parameter \#1 \$factory of function DI\\factory expects callable\(\)\: mixed, .+#'
+            path: config/dependencies.php

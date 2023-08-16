@@ -1,2 +1,2 @@
 # customer-api
-Cusotmer API
+Customer API
