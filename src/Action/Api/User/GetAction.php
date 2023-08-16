@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace App\Action;
+namespace App\Action\Api\User;
 
 use App\Action\AbstractAction;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 
-class IndexAction extends AbstractAction
+class GetAction extends AbstractAction
 {
     public function invoke(): ResponseInterface
     {
         return new JsonResponse([
             'success' => false,
             'data' => [],
-            'message' => 'Forbidden'
-        ], 403);
+            'message' => ''
+        ], 500);
     }
 }
