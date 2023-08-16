@@ -1,0 +1,8 @@
+.idea/
+cache/
+phpStanTmp/
+vendor/
+.env
+.phpunit.result.cache
+memory*
+coverage.html/
