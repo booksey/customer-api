@@ -7,7 +7,7 @@ use Slim\Factory\ServerRequestCreatorFactory;
 
 class ServerRequestFactory
 {
-    /** @SuppressWarnings(PHPMD.Superglobals) */
+    /** @SuppressWarnings(PHPMD.StaticAccess) */
     public function __invoke(): ServerRequestInterface
     {
         $serverRequestCreator = ServerRequestCreatorFactory::create();

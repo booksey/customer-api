@@ -2,21 +2,25 @@
 
 namespace App\Entity;
 
-
 use DateTime;
 use JMS\Serializer\Annotation\Type as SerializerType;
 
 class User
 {
-    private int $id;
+    private int $customerId;
     private string $address;
     private ?string $code;
     #[SerializerType("DateTime<'Y-m-d'>")]
     private DateTime $contractDate;
 
-    public function getId(): int
+    public function getCustomerId(): int
     {
-        return $this->id;
+        return $this->customerId;
+    }
+
+    public function setCustomerId(int $customerId): void
+    {
+        $this->customerId = $customerId;
     }
 
     public function getAddress(): string
@@ -29,7 +33,7 @@ class User
         $this->address = $address;
     }
 
-    public function getCode(): string
+    public function getCode(): ?string
     {
         return $this->code;
     }
