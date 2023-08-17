@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Test\Action\Api\User;
+namespace App\Test\Action\Api\Customer;
 
-use App\Action\Api\User\DeleteAction;
+use App\Action\Api\Customer\DeleteAction;
 use App\Test\Action\AbstractActionTest;
 use Laminas\Diactoros\Response\JsonResponse;
 

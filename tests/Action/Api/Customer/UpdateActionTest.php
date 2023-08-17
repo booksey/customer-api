@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Test\Action\Api\User;
+namespace App\Test\Action\Api\Customer;
 
-use App\Action\Api\User\UpdateAction;
+use App\Action\Api\Customer\UpdateAction;
 use App\Test\Action\AbstractActionTest;
 use Laminas\Diactoros\Response\JsonResponse;
 
@@ -29,15 +29,15 @@ class UpdateActionTest extends AbstractActionTest
     {
         return [
             [null, 500],  //Invalid customerId
-            [(object)['customerId' => 0, 'userData' => []], 500],  //Invalid customerId and userData
+            [(object)['customerId' => 0, 'CustomerData' => []], 500],  //Invalid customerId and CustomerData
             [
-                (object)['customerId' => 0, 'userData' => json_encode(['address' => 'test address'])], 500
+                (object)['customerId' => 0, 'CustomerData' => json_encode(['address' => 'test address'])], 500
             ],  //Invalid customerId
             [
-                (object)['customerId' => 1, 'userData' => json_encode(['invalidProperty' => 'test address'])], 500
+                (object)['customerId' => 1, 'CustomerData' => json_encode(['invalidProperty' => 'test address'])], 500
             ],  //Invalid property
             [
-                (object)['customerId' => 1, 'userData' => json_encode(['name' => 'test name', 'code' => null])], 200
+                (object)['customerId' => 1, 'CustomerData' => json_encode(['name' => 'test name', 'code' => null])], 200
             ],  //OK
         ];
     }

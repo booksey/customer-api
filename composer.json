@@ -24,7 +24,7 @@
         "cs-fix": "phpcbf",
         "phpmd": "phpmd src/ text phpmd.xml",
         "stan": "phpstan analyse -c phpstan.neon src tests public config -l 9",
-        "test": "phpunit --colors=always",
+        "test": "phpunit --colors=always --filter GetActionTest",
         "test-coverage": "XDEBUG_MODE=coverage phpunit --coverage-text",
         "test-coverage-html": "XDEBUG_MODE=coverage phpunit --coverage-text --coverage-html coverage.html",
         "check-all": [
@@ -42,7 +42,6 @@
     },
     "require": {
         "aws/aws-sdk-php": "^3.278",
-        "jms/serializer": "^3.27",
         "laminas/laminas-config": "^3.8",
         "laminas/laminas-config-aggregator": "^1.13",
         "laminas/laminas-diactoros": "^3.1",

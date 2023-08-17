@@ -3,20 +3,38 @@
 namespace App\Entity;
 
 use DateTime;
-use JMS\Serializer\Annotation\Type as SerializerType;
+use JsonSerializable;
 
-class User
+class Customer implements JsonSerializable
 {
-    private readonly int $customerId;
-    private string $name;
-    private string $address;
-    private ?string $code;
-    #[SerializerType("DateTime<'Y-m-d'>")]
-    private DateTime $contractDate;
+    public function __construct(
+        private ?int $id,
+        private string $name,
+        private string $address,
+        private ?string $code,
+        private DateTime $contractDate
+    ) {
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return [
+            'customerId' => $this->id,
+            'name' => $this->name,
+            'address' => $this->address,
+            'code' => $this->code,
+            'contractDate' => $this->contractDate->format('Y-m-d')
+        ];
+    }
 
     public function getCustomerId(): int
     {
-        return $this->customerId;
+        return $this->id;
+    }
+
+    public function setCustomerId(int $id): void
+    {
+        $this->id = $id;
     }
 
     public function getName(): string

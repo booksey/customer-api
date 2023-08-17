@@ -2,27 +2,32 @@
 
 declare(strict_types=1);
 
-namespace App\Action\Api\User;
+namespace App\Action\Api\Customer;
 
 use App\Action\AbstractAction;
+use App\Interfaces\DatabaseServiceInterface;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 
 class GetAction extends AbstractAction
 {
+    public function __construct(private readonly DatabaseServiceInterface $databaseService)
+    {
+    }
+
     public function invoke(): ResponseInterface
     {
         $parsedBody = $this->request->getParsedBody();
+        if (!is_object($parsedBody)) {
+            return new JsonResponse(['data' => null], 500);
+        }
+
         $customerId = isset($parsedBody->customerId) && is_numeric($parsedBody->customerId)
             ? $parsedBody->customerId
             : null;
 
-        if (!is_null($customerId) && intval($customerId) === 0) {
-            return new JsonResponse(['success' => false], 500);
-        }
+        $result = $this->databaseService->select($customerId);
 
-        return new JsonResponse([
-            'data' => [],
-        ], 200);
+        return new JsonResponse(['data' => $result], 200);
     }
 }

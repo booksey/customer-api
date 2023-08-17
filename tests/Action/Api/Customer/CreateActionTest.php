@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Test\Action\Api\User;
+namespace App\Test\Action\Api\Customer;
 
-use App\Action\Api\User\GetAction;
+use App\Action\Api\Customer\CreateAction;
 use App\Test\Action\AbstractActionTest;
+use DateTime;
 use Laminas\Diactoros\Response\JsonResponse;
 
-class GetActionTest extends AbstractActionTest
+class CreateActionTest extends AbstractActionTest
 {
     /**
      * @dataProvider invokeDataProvider
@@ -17,7 +18,7 @@ class GetActionTest extends AbstractActionTest
     {
         $this->request->expects($this->once())->method('getParsedBody')->willReturn($parsedBody);
 
-        $action = new GetAction();
+        $action = new CreateAction();
         $response = $action($this->request, $this->response);
 
         /** @var JsonResponse $response */
@@ -28,10 +29,16 @@ class GetActionTest extends AbstractActionTest
     public static function invokeDataProvider(): array
     {
         return [
-            [null, 200],  //OK, get all customers
-            [(object)['customerId' => 0], 500],  //invalid customerId
-            [(object)['invalidProperty' => 1], 200],  //OK, ignores property and gets all customers
-            [(object)['customerId' => 1], 200],  //OK, get one customer
+            [null, 500],  //Invalid CustomerData
+            [(object)['CustomerData' => json_encode(['invalidProperty' => 1])], 500],  //Invalid CustomerData
+            [(object)[
+                'CustomerData' => json_encode([
+                    'name' => 'test name',
+                    'address' => 'test address',
+                    'code' => 'test code',
+                    'contractDate' => new DateTime()
+                ])
+            ], 200],  //OK
         ];
     }
 }

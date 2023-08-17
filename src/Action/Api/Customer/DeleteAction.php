@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Action\Api\User;
+namespace App\Action\Api\Customer;
 
 use App\Action\AbstractAction;
 use Laminas\Diactoros\Response\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 
-class UpdateAction extends AbstractAction
+class DeleteAction extends AbstractAction
 {
     public function invoke(): ResponseInterface
     {
