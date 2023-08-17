@@ -13,7 +13,6 @@ use Laminas\Diactoros\Response\JsonResponse;
 
 class DeleteActionTest extends AbstractActionTest
 {
-
     /**
      * @dataProvider invokeDataProvider
      */
@@ -28,6 +27,7 @@ class DeleteActionTest extends AbstractActionTest
         /** @var JsonResponse $response */
         $response = $action($this->request, $this->response);
 
+        /** @var array $payload */
         $payload = $response->getPayload();
         $payloadResult = $payload['success'];
 

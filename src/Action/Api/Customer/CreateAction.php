@@ -24,28 +24,35 @@ class CreateAction extends AbstractAction
     public function invoke(): ResponseInterface
     {
         $parsedBody = $this->request->getParsedBody();
-        if (!is_object($parsedBody) || !is_array($parsedBody->customers) || count($parsedBody->customers) < 1) {
+        $customers = $parsedBody->customers ?? [];
+        if (!is_object($parsedBody) || !is_array($customers) || count($customers) < 1) {
             return new JsonResponse(['success' => false], 500);
         }
 
         $customerCollection = new CustomerCollection();
-        foreach ($parsedBody->customers as $customerArray) {
+        foreach ($customers as $customerArray) {
             try {
                 Assert::integer($customerArray['id'], 'Invalid customer id.');
                 Assert::stringNotEmpty($customerArray['name'], 'Invalid customer name.');
                 Assert::stringNotEmpty($customerArray['address'], 'Invalid customer address.');
                 Assert::nullOrString($customerArray['code'], 'Invalid customer code.');
-                Assert::regex($customerArray['contractDate'], '/^[0-9]{4}-[0-9]{2}-[0-9]{2}/', 'Invalid contract date.');
+                Assert::regex(
+                    $customerArray['contractDate'],
+                    '/^[0-9]{4}-[0-9]{2}-[0-9]{2}/',
+                    'Invalid contract date.'
+                );
             } catch (InvalidArgumentException $e) {
                 return new JsonResponse(['success' => false], 500);
             }
 
+            /** @var DateTime $contractDate */
+            $contractDate = DateTime::createFromFormat('Y-m-d', $customerArray['contractDate']);
             $customer = new Customer(
                 $customerArray['id'],
                 $customerArray['name'],
                 $customerArray['address'],
                 $customerArray['code'],
-                DateTime::createFromFormat('Y-m-d', $customerArray['contractDate'])
+                $contractDate
             );
             $customerCollection->add($customer);
         }

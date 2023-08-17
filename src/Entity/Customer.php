@@ -5,6 +5,7 @@ namespace App\Entity;
 use DateTime;
 use JsonSerializable;
 
+/** @SuppressWarnings(PHPMD.ShortVariable) */
 class Customer implements JsonSerializable
 {
     public function __construct(
@@ -27,7 +28,7 @@ class Customer implements JsonSerializable
         ];
     }
 
-    public function getCustomerId(): int
+    public function getCustomerId(): ?int
     {
         return $this->id;
     }

@@ -11,7 +11,6 @@ use Laminas\Diactoros\Response\JsonResponse;
 
 class GetActionTest extends AbstractActionTest
 {
-
     /**
      * @dataProvider invokeDataProvider
      */
@@ -22,6 +21,7 @@ class GetActionTest extends AbstractActionTest
         $action = new GetAction($this->databaseService);
         /** @var JsonResponse $response */
         $response = $action($this->request, $this->response);
+        /** @var array $payload */
         $payload = $response->getPayload();
         $payloadData = $payload['data'];
 
@@ -32,6 +32,7 @@ class GetActionTest extends AbstractActionTest
             $this->assertNull($payloadData);
         }
         if (!is_null($expectedPayloadType)) {
+            /** @var class-string<object> $expectedPayloadType */
             $this->assertInstanceOf($expectedPayloadType, $payloadData);
         }
     }
@@ -41,7 +42,7 @@ class GetActionTest extends AbstractActionTest
         return [
             [null, 500, null],  //invalid parsedBody
             [(object)['customerId' => null], 200, CustomerCollection::class],  //OK, get all Customers
-            [(object)['invalidProperty' => 1], 200, CustomerCollection::class],  //OK, ignores property and gets all Customers
+            [(object)['invalidProperty' => 1], 200, CustomerCollection::class],  //OK, gets all Customers
             [(object)['customerId' => 9999], 200, null],  //OK, not found customer
         ];
     }

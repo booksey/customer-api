@@ -19,5 +19,5 @@ parameters:
     reportUnmatchedIgnoredErrors: false
     ignoreErrors:
         -
-            message: '#Parameter \#1 \$factory of function DI\\factory expects callable\(\)\: mixed, .+#'
-            path: config/dependencies.php
+            message: '#Parameter \#[0-9]{1} .+ of (class|callable) .+ expects .+, PHPUnit\\Framework\\MockObject\\MockObject given\.#'
+            path: tests/*

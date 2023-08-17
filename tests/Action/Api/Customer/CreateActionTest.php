@@ -14,7 +14,6 @@ use Laminas\Diactoros\Response\JsonResponse;
 
 class CreateActionTest extends AbstractActionTest
 {
-
     /**
      * @dataProvider invokeDataProvider
      */
@@ -29,6 +28,7 @@ class CreateActionTest extends AbstractActionTest
         /** @var JsonResponse $response */
         $response = $action($this->request, $this->response);
 
+        /** @var array $payload */
         $payload = $response->getPayload();
         $payloadResult = $payload['success'];
 

@@ -23,7 +23,7 @@ class GetAction extends AbstractAction
         }
 
         $customerId = isset($parsedBody->customerId) && is_numeric($parsedBody->customerId)
-            ? $parsedBody->customerId
+            ? intval($parsedBody->customerId)
             : null;
 
         $result = $this->databaseService->select($customerId);

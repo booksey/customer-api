@@ -7,10 +7,7 @@ use App\Entity\Customer;
 
 interface DatabaseServiceInterface
 {
-    /**
-     * Selects customer(s) from the database
-     * @throws Exception
-     */
+    /** Selects customer(s) from the database */
     public function select(?int $customerId): null|Customer|CustomerCollection;
 
     /** Inserts customer(s) into the database */

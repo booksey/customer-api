@@ -45,18 +45,24 @@ class DatabaseService implements DatabaseServiceInterface
 
     private function createCustomerFromItem(array $item): Customer
     {
+        /** @var DateTime $contractDate */
+        $contractDate = DateTime::createFromFormat('Y-m-d', $item['contractDate']);
         return new Customer(
             $item['id'],
             $item['name'],
             $item['address'],
             $item['code'],
-            DateTime::createFromFormat('Y-m-d', $item['contractDate'])
+            $contractDate
         );
     }
 
     private function createItemFromCustomer(Customer $customer): array
     {
-        return json_decode(json_encode($customer), true);
+        /** @var string $customerString */
+        $customerString = json_encode($customer);
+        /** @var array $result */
+        $result = json_decode($customerString, true);
+        return $result;
     }
 
     public function select(?int $customerId): null|Customer|CustomerCollection
@@ -73,7 +79,9 @@ class DatabaseService implements DatabaseServiceInterface
             if (!$resultItem) {
                 return null;
             }
+            /** @var array $resultItem */
             $unmarshalledItem = $this->marshaler->unmarshalItem($resultItem);
+            /** @var array $unmarshalledItem */
             return $this->createCustomerFromItem($unmarshalledItem);
         }
 
@@ -87,7 +95,9 @@ class DatabaseService implements DatabaseServiceInterface
 
         $customerCollection = new CustomerCollection();
         foreach ($iterator as $item) {
+            /** @var array $item */
             $unmarshalledItem = $this->marshaler->unmarshalItem($item);
+            /** @var array $unmarshalledItem */
             $customerCollection->add($this->createCustomerFromItem($unmarshalledItem));
         }
 
@@ -102,6 +112,7 @@ class DatabaseService implements DatabaseServiceInterface
     {
         $wasInsert = false;
         foreach ($customers as $customer) {
+            /** @var Customer $customer */
             $customerItem = $this->createItemFromCustomer($customer);
             $storedCustomer = $this->select($customerItem['id']);
 
@@ -114,7 +125,7 @@ class DatabaseService implements DatabaseServiceInterface
 
                 /** @var Result $result */
                 $metadata = $result->get('@metadata');
-                $statusCode = $metadata['statusCode'] ?? 0;
+                $statusCode = is_array($metadata) && $metadata['statusCode'] ? $metadata['statusCode'] : 0;
                 if ($statusCode === 200) {
                     $wasInsert = true;
                 }
@@ -128,6 +139,7 @@ class DatabaseService implements DatabaseServiceInterface
     {
         $wasUpdate = false;
         foreach ($customers as $customer) {
+            /** @var Customer $customer */
             $customerItem = $this->createItemFromCustomer($customer);
             $storedCustomer = $this->select($customerItem['id']);
 
@@ -151,7 +163,7 @@ class DatabaseService implements DatabaseServiceInterface
                 /** @var Result $result */
                 $result = $this->client->updateItem($updateItem);
                 $metadata = $result->get('@metadata');
-                $statusCode = $metadata['statusCode'] ?? 0;
+                $statusCode = is_array($metadata) && $metadata['statusCode'] ? $metadata['statusCode'] : 0;
                 if ($statusCode === 200) {
                     $wasUpdate = true;
                 }
@@ -165,6 +177,7 @@ class DatabaseService implements DatabaseServiceInterface
     {
         $wasDelete = false;
         foreach ($customers as $customer) {
+            /** @var Customer $customer */
             $customerItem = $this->createItemFromCustomer($customer);
             $storedCustomer = $this->select($customerItem['id']);
 
@@ -175,7 +188,7 @@ class DatabaseService implements DatabaseServiceInterface
                     'TableName' => self::CUSTOMER_TABLE_NAME
                 ]);
                 $metadata = $result->get('@metadata');
-                $statusCode = $metadata['statusCode'] ?? 0;
+                $statusCode = is_array($metadata) && $metadata['statusCode'] ? $metadata['statusCode'] : 0;
                 if ($statusCode === 200) {
                     $wasDelete = true;
                 }
