@@ -42,7 +42,7 @@ class GetActionTest extends AbstractActionTest
             [null, 500, null],  //invalid parsedBody
             [(object)['customerId' => null], 200, CustomerCollection::class],  //OK, get all Customers
             [(object)['invalidProperty' => 1], 200, CustomerCollection::class],  //OK, ignores property and gets all Customers
-            [(object)['customerId' => 9999], 200, null],  //OK, not found user
+            [(object)['customerId' => 9999], 200, null],  //OK, not found customer
         ];
     }
 }

@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" backupGlobals="false" bootstrap="vendor/autoload.php" colors="true" processIsolation="false" stopOnFailure="false" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.3/phpunit.xsd" cacheDirectory=".phpunit.cache" backupStaticProperties="false">
-  <coverage/>
-  <testsuites>
-    <testsuite name="Customer API Test Suite">
-      <directory suffix=".php">./tests/</directory>
-    </testsuite>
-  </testsuites>
-  <source>
-    <include>
-      <directory suffix=".php">./src</directory>
-    </include>
-  </source>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" backupGlobals="false" bootstrap="vendor/autoload.php" colors="true" processIsolation="false" stopOnFailure="false" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.3/phpunit.xsd" cacheDirectory=".phpunit.cache" backupStaticProperties="false" displayDetailsOnTestsThatTriggerWarnings="true">
+	<testsuites>
+		<testsuite name="Customer API Test Suite">
+			<directory suffix=".php">./tests/</directory>
+			<exclude>./tests/Action/AbstractActionTest.php</exclude>
+		</testsuite>
+	</testsuites>
+	<source>
+		<include>
+			<directory suffix=".php">./src</directory>
+		</include>
+        <exclude>
+            <file>./src/Entity/Customer.php</file>
+            <file>./src/Services/DatabaseService.php</file>
+        </exclude>
+	</source>
 </phpunit>

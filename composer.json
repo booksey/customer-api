@@ -24,7 +24,7 @@
         "cs-fix": "phpcbf",
         "phpmd": "phpmd src/ text phpmd.xml",
         "stan": "phpstan analyse -c phpstan.neon src tests public config -l 9",
-        "test": "phpunit --colors=always --filter GetActionTest",
+        "test": "phpunit --colors=always --filter DeleteActionTest",
         "test-coverage": "XDEBUG_MODE=coverage phpunit --coverage-text",
         "test-coverage-html": "XDEBUG_MODE=coverage phpunit --coverage-text --coverage-html coverage.html",
         "check-all": [
@@ -48,7 +48,8 @@
         "php-di/php-di": "^7.0",
         "psr/container": "^1.1",
         "slim/slim": "^4.12",
-        "vlucas/phpdotenv": "^5.5"
+        "vlucas/phpdotenv": "^5.5",
+        "webmozart/assert": "^1.11"
     },
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^1.0",

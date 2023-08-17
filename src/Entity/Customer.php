@@ -19,7 +19,7 @@ class Customer implements JsonSerializable
     public function jsonSerialize(): mixed
     {
         return [
-            'customerId' => $this->id,
+            'id' => $this->id,
             'name' => $this->name,
             'address' => $this->address,
             'code' => $this->code,

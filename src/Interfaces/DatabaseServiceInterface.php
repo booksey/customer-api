@@ -14,11 +14,11 @@ interface DatabaseServiceInterface
     public function select(?int $customerId): null|Customer|CustomerCollection;
 
     /** Inserts customer(s) into the database */
-    public function insert(Customer|CustomerCollection $data): bool;
+    public function insert(CustomerCollection $data): bool;
 
     /** Updates customer(s) */
-    public function update(Customer|CustomerCollection $data): bool;
+    public function update(CustomerCollection $data): bool;
 
     /** Deletes customer(s) */
-    public function delete(Customer|CustomerCollection $data): bool;
+    public function delete(CustomerCollection $data): bool;
 }

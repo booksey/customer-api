@@ -7,6 +7,7 @@ use App\Collections\CustomerCollection;
 use App\Interfaces\DatabaseServiceInterface;
 use Aws\DynamoDb\DynamoDbClient;
 use Aws\DynamoDb\Marshaler;
+use Aws\Result;
 use Aws\Sdk;
 use DateTime;
 use Dotenv\Dotenv;
@@ -53,6 +54,11 @@ class DatabaseService implements DatabaseServiceInterface
         );
     }
 
+    private function createItemFromCustomer(Customer $customer): array
+    {
+        return json_decode(json_encode($customer), true);
+    }
+
     public function select(?int $customerId): null|Customer|CustomerCollection
     {
         if ($customerId || $customerId === 0) {
@@ -81,7 +87,6 @@ class DatabaseService implements DatabaseServiceInterface
 
         $customerCollection = new CustomerCollection();
         foreach ($iterator as $item) {
-
             $unmarshalledItem = $this->marshaler->unmarshalItem($item);
             $customerCollection->add($this->createCustomerFromItem($unmarshalledItem));
         }
@@ -93,18 +98,90 @@ class DatabaseService implements DatabaseServiceInterface
         return null;
     }
 
-    public function insert(Customer|CustomerCollection $data): bool
+    public function insert(CustomerCollection $customers): bool
     {
-        return false;
+        $wasInsert = false;
+        foreach ($customers as $customer) {
+            $customerItem = $this->createItemFromCustomer($customer);
+            $storedCustomer = $this->select($customerItem['id']);
+
+            if (is_null($storedCustomer)) {
+                $marshalledItem = $this->marshaler->marshalItem($customerItem);
+                $result = $this->client->putItem([
+                    'Item' => $marshalledItem,
+                    'TableName' => self::CUSTOMER_TABLE_NAME
+                ]);
+
+                /** @var Result $result */
+                $metadata = $result->get('@metadata');
+                $statusCode = $metadata['statusCode'] ?? 0;
+                if ($statusCode === 200) {
+                    $wasInsert = true;
+                }
+            }
+        }
+
+        return $wasInsert;
     }
 
-    public function update(Customer|CustomerCollection $data): bool
+    public function update(CustomerCollection $customers): bool
     {
-        return false;
+        $wasUpdate = false;
+        foreach ($customers as $customer) {
+            $customerItem = $this->createItemFromCustomer($customer);
+            $storedCustomer = $this->select($customerItem['id']);
+
+            if ($storedCustomer instanceof Customer) {
+                $marshalledIdItem = $this->marshaler->marshalItem(['id' => $customerItem['id']]);
+                unset($customerItem['id']);
+
+                $attributeUpdates = [];
+                foreach ($customerItem as $attrName => $attrValue) {
+                    $attributeUpdates[$attrName] = [
+                        'Action' => 'PUT',
+                        'Value' => $this->marshaler->marshalValue($attrValue),
+                    ];
+                }
+
+                $updateItem = [
+                    'AttributeUpdates' => $attributeUpdates,
+                    'Key' => $marshalledIdItem,
+                    'TableName' => self::CUSTOMER_TABLE_NAME,
+                ];
+                /** @var Result $result */
+                $result = $this->client->updateItem($updateItem);
+                $metadata = $result->get('@metadata');
+                $statusCode = $metadata['statusCode'] ?? 0;
+                if ($statusCode === 200) {
+                    $wasUpdate = true;
+                }
+            }
+        }
+
+        return $wasUpdate;
     }
 
-    public function delete(Customer|CustomerCollection $data): bool
+    public function delete(CustomerCollection $customers): bool
     {
-        return false;
+        $wasDelete = false;
+        foreach ($customers as $customer) {
+            $customerItem = $this->createItemFromCustomer($customer);
+            $storedCustomer = $this->select($customerItem['id']);
+
+            if ($storedCustomer instanceof Customer) {
+                $marshalledItem = $this->marshaler->marshalItem(['id' => $customerItem['id']]);
+                $result = $this->client->deleteItem([
+                    'Key' => $marshalledItem,
+                    'TableName' => self::CUSTOMER_TABLE_NAME
+                ]);
+                $metadata = $result->get('@metadata');
+                $statusCode = $metadata['statusCode'] ?? 0;
+                if ($statusCode === 200) {
+                    $wasDelete = true;
+                }
+            }
+        }
+
+        return $wasDelete;
     }
 }
