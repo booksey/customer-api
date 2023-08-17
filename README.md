@@ -13,6 +13,10 @@ $ cat .env.dist > .env
 APP_ENV=environment  (default "dev", used for debugging)<br/>
 AWS_ACCESS_KEY_ID and YOUR_AWS_SECRET_ACCESS_KEY are not necessary, I used AWS Dynamo DB Service for testing.
 
+## Setup VirtualHost
+The API uses Slim 4 PHP framework for managing routes, set up your VirtualHost accordingly. (.htaccess added to public folder for Apache)<br/>
+More information: https://www.slimframework.com/docs/v4/start/web-servers.html
+
 ## Add Database Service to project
 I used AWS DynamoDb service and created App\Services\DatabaseService to manage database statements.
 Add AWS database environment variables to .env and you can use it right away.
